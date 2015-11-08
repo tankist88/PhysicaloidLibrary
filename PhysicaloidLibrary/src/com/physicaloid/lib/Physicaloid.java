@@ -427,4 +427,11 @@ public class Physicaloid {
             return mSerial.setDtrRts(dtrOn, rtsOn);
         }
     }
+
+    public int getFileDescriptor() {
+        synchronized (LOCK) {
+            if (mSerial == null) return -1;
+            return mSerial.getFileDescriptor();
+        }
+    }
 }

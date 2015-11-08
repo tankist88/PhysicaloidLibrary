@@ -20,7 +20,7 @@ public class UartCp210x extends SerialCommunicator{
     private static final String TAG = UartCp210x.class.getSimpleName();
 
     private static final boolean DEBUG_SHOW = false && BuildConfig.DEBUG;
-    private static final int DEFAULT_BAUDRATE = 9600;
+    private static final int DEFAULT_BAUDRATE = 115200;
 
     private UsbCdcConnection mUsbConnetionManager;
 
@@ -209,7 +209,7 @@ public class UartCp210x extends SerialCommunicator{
             }
             System.arraycopy(buf, offset, wbuf, 0, write_size);
 
-            written_size = mConnection.bulkTransfer(mEndpointOut, wbuf, write_size, 100);
+            written_size = mConnection.bulkTransfer(mEndpointOut, wbuf, write_size, 5000);
 
             if (written_size < 0) {
                 return -1;
@@ -240,7 +240,7 @@ public class UartCp210x extends SerialCommunicator{
 
                 try {
                     len = mConnection.bulkTransfer(mEndpointIn,
-                            rbuf, rbuf.length, 50);
+                            rbuf, rbuf.length, 10);
                 } catch(Exception e) {
                     Log.e(TAG, e.toString());
                 }
@@ -255,7 +255,7 @@ public class UartCp210x extends SerialCommunicator{
                 }
 
                 try {
-                    Thread.sleep(50);
+                    Thread.sleep(10);
                 } catch (InterruptedException e) {
                 }
 
@@ -380,6 +380,19 @@ public class UartCp210x extends SerialCommunicator{
                 0,
                 buf,
                 size,
+                100);
+        return ret;
+    }
+
+    private int cp210xSetConfigDtrRts(int request, int bits) {
+        if(mConnection == null) return -1;
+        int ret = mConnection.controlTransfer(
+                REQTYPE_HOST_TO_INTERFACE,
+                request,
+                bits,
+                0,
+                new byte[0],
+                0,
                 100);
         return ret;
     }
@@ -573,8 +586,8 @@ public class UartCp210x extends SerialCommunicator{
             ctrlValue |= CONTROL_WRITE_RTS;
         }
 
-        intToLittleEndianBytes(ctrlValue, buf);
-        int ret = cp210xSetConfig(CP210X_SET_MHS, buf, buf.length);
+//        intToLittleEndianBytes(ctrlValue, buf);
+        int ret = cp210xSetConfigDtrRts(CP210X_SET_MHS, ctrlValue);
 
         if(ret < 0) { 
             if(DEBUG_SHOW) { Log.d(TAG, "Fail to setDtrRts"); }
@@ -623,6 +636,11 @@ public class UartCp210x extends SerialCommunicator{
     @Override
     public void clearBuffer() {
         mBuffer.clear();
+    }
+
+    @Override
+    public int getFileDescriptor() {
+        return mConnection.getFileDescriptor();
     }
 
     //////////////////////////////////////////////////////////

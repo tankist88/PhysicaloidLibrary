@@ -403,6 +403,11 @@ public class UartFtdi extends SerialCommunicator {
         mBuffer.clear();
     }
 
+    @Override
+    public int getFileDescriptor() {
+        return -1;
+    }
+
 
     //////////////////////////////////////////////////////////
     // Listener for reading uart

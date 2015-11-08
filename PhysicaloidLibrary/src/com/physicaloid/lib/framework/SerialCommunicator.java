@@ -170,4 +170,9 @@ public abstract class SerialCommunicator {
      * Clears read buffer
      */
     abstract public void clearBuffer();
+
+    /**
+     * Get native unix file descriptor
+     */
+    abstract public int getFileDescriptor();
 }

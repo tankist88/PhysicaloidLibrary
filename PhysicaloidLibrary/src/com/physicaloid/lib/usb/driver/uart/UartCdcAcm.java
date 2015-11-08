@@ -342,6 +342,11 @@ public class UartCdcAcm extends SerialCommunicator{
         mBuffer.clear();
     }
 
+    @Override
+    public int getFileDescriptor() {
+        return mConnection.getFileDescriptor();
+    }
+
     //////////////////////////////////////////////////////////
     // Listener for reading uart
     //////////////////////////////////////////////////////////
