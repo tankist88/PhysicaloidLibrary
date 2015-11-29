@@ -41,7 +41,7 @@ public class UartConfig {
     public boolean dtrOn;
 
     public UartConfig() {
-        this.baudrate       = 115200;
+        this.baudrate       = 9600;
         this.dataBits       = DATA_BITS8;
         this.stopBits       = STOP_BITS1;
         this.parity         = PARITY_NONE;

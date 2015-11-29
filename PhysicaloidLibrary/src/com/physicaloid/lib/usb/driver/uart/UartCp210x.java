@@ -20,7 +20,7 @@ public class UartCp210x extends SerialCommunicator{
     private static final String TAG = UartCp210x.class.getSimpleName();
 
     private static final boolean DEBUG_SHOW = false && BuildConfig.DEBUG;
-    private static final int DEFAULT_BAUDRATE = 115200;
+    private static final int DEFAULT_BAUDRATE = 9600;
 
     private UsbCdcConnection mUsbConnetionManager;
 
@@ -237,10 +237,8 @@ public class UartCp210x extends SerialCommunicator{
             int len=0;
             byte[] rbuf = new byte[USB_READ_BUFFER_SIZE];
             for (;;) {// this is the main loop for transferring
-
                 try {
-                    len = mConnection.bulkTransfer(mEndpointIn,
-                            rbuf, rbuf.length, 10);
+                    len = mConnection.bulkTransfer(mEndpointIn, rbuf, rbuf.length, 100);
                 } catch(Exception e) {
                     Log.e(TAG, e.toString());
                 }
@@ -255,7 +253,7 @@ public class UartCp210x extends SerialCommunicator{
                 }
 
                 try {
-                    Thread.sleep(10);
+                    Thread.sleep(5);
                 } catch (InterruptedException e) {
                 }
 
