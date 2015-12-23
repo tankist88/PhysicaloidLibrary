@@ -25,7 +25,7 @@ public class UartCp210x extends SerialCommunicator{
     private UsbCdcConnection mUsbConnetionManager;
 
     private UartConfig mUartConfig;
-    private static final int RING_BUFFER_SIZE       = 1024;
+    private static final int RING_BUFFER_SIZE       = 65536;
     private static final int USB_READ_BUFFER_SIZE   = 256;
     private static final int USB_WRITE_BUFFER_SIZE  = 256;
     private RingBuffer mBuffer;
@@ -251,12 +251,6 @@ public class UartCp210x extends SerialCommunicator{
                 if (mReadThreadStop) {
                     return;
                 }
-
-                try {
-                    Thread.sleep(5);
-                } catch (InterruptedException e) {
-                }
-
             }
         } // end of run()
     }; // end of runnable
